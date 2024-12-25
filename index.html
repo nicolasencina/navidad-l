@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Quiz con Video de Fondo y Spotify</title>
+    <title>REGALO DE NAVIDAD</title>
     <style>
         /* Estilo básico de reset */
         * {
@@ -80,7 +80,7 @@
             padding: 10px;
             border: none;
             border-radius: 5px;
-            background-color: #3498db;
+            background-color: #a531bf;
             color: #fff;
             font-size: 1rem;
             cursor: pointer;
@@ -108,17 +108,33 @@
             font-weight: bold;
         }
 
-        /* Estilos para el embed de Spotify */
+        /* Contenedor del embed de Spotify */
+        .spotify-embed {
+            margin: 0 auto;
+            /* Centra el contenedor */
+            display: block;
+            max-width: 400px;
+            /* Ajusta el ancho máximo para el reproductor e imagen */
+            width: 100%;
+        }
+
+        /* Imagen que aparece arriba del iframe */
+        .my-image {
+            display: block;
+            margin: 0 auto 20px auto;
+            /* Centrar y dar margen inferior */
+            width: 300px;
+            /* Ajusta el tamaño que desees */
+            height: auto;
+            /* Mantiene la proporción de la imagen */
+        }
+
+        /* Reproductor de Spotify */
         .spotify-embed iframe {
             border-radius: 12px;
             width: 100%;
-            max-width: 400px;
-            /* Ajusta el ancho máximo a tu gusto */
             height: 352px;
-            /* Ajusta la altura a tu gusto */
-            margin: 0 auto;
             display: block;
-            /* Centra el iframe */
         }
     </style>
 </head>
@@ -136,7 +152,7 @@
 
     <!-- Contenedor principal del quiz -->
     <div class="quiz-container">
-        <h1>¡Bienvenido al Quiz!</h1>
+        <h1>¡QUIZ INCREÍBLE!</h1>
 
         <!-- Contenido del quiz -->
         <div id="quiz" class="quiz-content">
@@ -145,18 +161,22 @@
             <div id="feedback"></div>
         </div>
 
-        <!-- Pantalla final (Felicitaciones + Canción de Spotify) -->
+        <!-- Pantalla final (Felicitaciones + Canción de Spotify + Imagen arriba) -->
         <div id="final-screen" class="hidden">
-            <p class="final-screen">¡Felicitaciones! Has respondido correctamente las 3 preguntas.</p>
+            <p class="final-screen">¡Felicitaciones Elena! Ahora puedes ver tu regalo de navidad
+            </p>
 
             <!-- Contenedor del embed de Spotify -->
             <div class="spotify-embed">
-                <!-- Aquí pega el código de inserción de tu canción de Spotify -->
+                <!-- Imagen arriba del iframe -->
+                <img class="my-image" src="imagen.png" alt="Mi imagen" />
+
+                <!-- iFrame de Spotify -->
                 <iframe style="border-radius:12px"
-                    src="https://open.spotify.com/embed/track/3n3Ppam7vgaVa1iaRUc9Lp?utm_source=generator" width="100%"
-                    height="352" frameborder="0" allowfullscreen=""
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
-                </iframe>
+                    src="https://open.spotify.com/embed/track/1xtBatmC1muBOY1RnUvP8Z?utm_source=generator" width="100%"
+                    height="352" frameBorder="0" allowfullscreen=""
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"></iframe>
             </div>
         </div>
     </div>
@@ -165,19 +185,19 @@
         // Arreglo de preguntas
         const questions = [
             {
-                question: "¿Cuál es la capital de Francia?",
-                options: ["Roma", "Berlín", "París", "Londres"],
-                correctAnswer: 2 // índice de "París"
+                question: "¿Cuál es la ciudad más increíble del mundo?",
+                options: ["Talca", "San Javier", "Ñuñoa", "New York"],
+                correctAnswer: 1 // índice de "San Javier"
             },
             {
-                question: "¿Cuál es el resultado de 2 + 2?",
-                options: ["3", "4", "5", "6"],
-                correctAnswer: 1 // índice de "4"
+                question: "¿Cuál es la mejor letra del abecedario?",
+                options: ["A", "N", "L", "LL"],
+                correctAnswer: 3 // índice de "LL"
             },
             {
-                question: "¿Cuál de estos es un planeta en nuestro sistema solar?",
-                options: ["Plutón", "X Æ A-12", "Saturno", "El Sol"],
-                correctAnswer: 2 // índice de "Saturno"
+                question: "¿Quién es el/la mejor fotógraf@ del mundo?",
+                options: ["Ansel Adams", "Diane Arbus", "Maggie Baker", "Elena Gutierrez"],
+                correctAnswer: 3 // índice de "Elena Gutierrez"
             }
         ];
 
