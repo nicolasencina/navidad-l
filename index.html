@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Quiz con Video de Fondo</title>
+    <style>
+        /* Estilo básico de reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            font-family: sans-serif;
+        }
+
+        /* Video a pantalla completa */
+        #video-background {
+            position: fixed;
+            /* Para que se mantenga en el fondo */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Ajusta el video para que cubra toda el área */
+            z-index: -1;
+            /* Ubica el video por debajo del contenido */
+        }
+
+        /* Capa semitransparente sobre el video (opcional) */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            /* Un tono oscuro semitransparente */
+            z-index: 0;
+        }
+
+        /* Contenedor del quiz */
+        .quiz-container {
+            position: relative;
+            /* Para aparecer sobre la capa semitransparente */
+            z-index: 1;
+            /* Asegura que el contenido esté por encima del video y la overlay */
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .option-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .final-screen {
+            font-size: 1.3rem;
+            color: #2c3e50;
+        }
+
+        .qr-container img {
+            width: 150px;
+            height: 150px;
+            margin-top: 20px;
+        }
+
+        /* Mensaje de retroalimentación */
+        #feedback {
+            margin-bottom: 10px;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Video de fondo (silenciado, con reproducción automática y en bucle) -->
+    <video id="video-background" autoplay muted loop>
+        <source src="video.mp4" type="video/mp4">
+        Tu navegador no soporta el elemento <code>video</code>.
+    </video>
+
+    <!-- Capa semitransparente (overlay) -->
+    <div class="overlay"></div>
+
+    <!-- Contenedor principal del quiz -->
+    <div class="quiz-container">
+        <h1>¡Bienvenido al Quiz!</h1>
+
+        <!-- Contenido del quiz -->
+        <div id="quiz" class="quiz-content">
+            <div class="question" id="question-text"></div>
+            <div class="options" id="options-container"></div>
+            <div id="feedback"></div>
+        </div>
+
+        <!-- Pantalla final (Felicitaciones + QR) -->
+        <div id="final-screen" class="hidden">
+            <p class="final-screen">¡Felicitaciones! Has respondido correctamente las 3 preguntas.</p>
+            <div class="qr-container">
+                <img src="qr.png" alt="Código QR del premio" />
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Arreglo de preguntas
+        const questions = [
+            {
+                question: "¿Cuál es la capital de Francia?",
+                options: ["Roma", "Berlín", "París", "Londres"],
+                correctAnswer: 2 // índice de "París"
+            },
+            {
+                question: "¿Cuál es el resultado de 2 + 2?",
+                options: ["3", "4", "5", "6"],
+                correctAnswer: 1 // índice de "4"
+            },
+            {
+                question: "¿Cuál de estos es un planeta en nuestro sistema solar?",
+                options: ["Plutón", "X Æ A-12", "Saturno", "El Sol"],
+                correctAnswer: 2 // índice de "Saturno"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedback = document.getElementById('feedback');
+        const finalScreen = document.getElementById('final-screen');
+        const quizContent = document.getElementById('quiz');
+
+        // Función para mostrar la pregunta actual
+        function showQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            questionText.textContent = currentQuestion.question;
+
+            // Limpiar opciones anteriores
+            optionsContainer.innerHTML = "";
+            feedback.textContent = "";
+
+            // Crear botones para cada opción
+            currentQuestion.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('option-btn');
+                button.addEventListener('click', () => checkAnswer(index));
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // Función para verificar la respuesta
+        function checkAnswer(selectedOptionIndex) {
+            const currentQuestion = questions[currentQuestionIndex];
+
+            if (selectedOptionIndex === currentQuestion.correctAnswer) {
+                // Respuesta correcta
+                currentQuestionIndex++;
+
+                // ¿Ya se respondió correctamente la última pregunta?
+                if (currentQuestionIndex >= questions.length) {
+                    // Mostrar pantalla final
+                    quizContent.classList.add('hidden');
+                    finalScreen.classList.remove('hidden');
+                } else {
+                    // Mostrar la siguiente pregunta
+                    showQuestion();
+                }
+            } else {
+                // Respuesta incorrecta
+                feedback.textContent = "¡Respuesta incorrecta! Inténtalo de nuevo.";
+            }
+        }
+
+        // Mostrar la primera pregunta al cargar la página
+        showQuestion();
+    </script>
+</body>
+
+</html>
